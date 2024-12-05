@@ -1,0 +1,2 @@
+1.4.5
+https://github.com/mjansson/rpmalloc/releases/tag/1.4.5
