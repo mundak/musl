@@ -5,6 +5,10 @@
 #include <limits.h>
 #include "syscall.h"
 
+// ringos
+#include <common/ros_debug.h>
+#include <kernel/syscalls.h>
+
 static void dummy(void) { }
 weak_alias(dummy, __vm_wait);
 
@@ -13,6 +17,24 @@ weak_alias(dummy, __vm_wait);
 
 void *__mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 {
+	// ringos
+	ROS_ASSERT(flags == MAP_PRIVATE | MAP_ANONYMOUS);
+	ROS_ASSERT(fd == -1);
+	ROS_ASSERT(off == 0);
+	ROS_ASSERT(len > 0);
+
+	uint64_t address = (uint64_t) start;
+	uint64_t num_of_pages = len / ROS_MEMORY_PAGE_SIZE;
+
+	if (ros_sys_memory_allocate_pages(&address, num_of_pages) != ROS_STATUS_SUCCESS)
+	{
+		return NULL;
+	}
+
+	return (void*) address;
+
+	// ringos end.
+
 	long ret;
 	if (off & OFF_MASK) {
 		errno = EINVAL;

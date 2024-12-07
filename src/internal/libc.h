@@ -5,9 +5,6 @@
 #include <stdio.h>
 #include <limits.h>
 
-// ringos
-#define ROS_UNSUPPORTED *((int*) 0xdeadbaadf00dcafe) = 1;
-
 struct __locale_map;
 
 struct __locale_struct {

@@ -2,6 +2,9 @@
 #include <errno.h>
 #include "libc.h"
 
+// ringos
+#include <common/ros_debug.h>
+
 unsigned long __getauxval(unsigned long item)
 {
 	// ringos:
@@ -12,7 +15,7 @@ unsigned long __getauxval(unsigned long item)
 		return 0x0;
 	}
 
-	ROS_UNSUPPORTED;
+	ROS_NOT_IMPLEMENTED;
 
 	size_t *auxv = libc.auxv;
 	if (item == AT_SECURE) return libc.secure;
