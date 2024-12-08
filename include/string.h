@@ -59,6 +59,10 @@ char *strerror (int);
 #include <strings.h>
 #endif
 
+// ringos
+char *strdup (const char *);
+char *strndup (const char *, size_t);
+
 #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
  || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
  || defined(_BSD_SOURCE)
@@ -67,8 +71,9 @@ int strerror_r (int, char *, size_t);
 char *stpcpy(char *__restrict, const char *__restrict);
 char *stpncpy(char *__restrict, const char *__restrict, size_t);
 size_t strnlen (const char *, size_t);
-char *strdup (const char *);
-char *strndup (const char *, size_t);
+// ringos
+// char *strdup (const char *);
+// char *strndup (const char *, size_t);
 char *strsignal(int);
 char *strerror_l (int, locale_t);
 int strcoll_l (const char *, const char *, locale_t);
