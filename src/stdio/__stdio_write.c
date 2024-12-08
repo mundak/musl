@@ -1,8 +1,25 @@
 #include "stdio_impl.h"
 #include <sys/uio.h>
 
+// ringos
+#include <kernel/syscalls.h>
+#include <common/ros_debug.h>
+
 size_t __stdio_write(FILE *f, const unsigned char *buf, size_t len)
 {
+	// ringos
+	if (f == stdout || f == stderr)
+	{
+		ROS_ASSERT(len < 1024);
+		char buffer[1024];
+		strncpy(buffer, buf, len);
+		buffer[len] = 0;
+		ros_sys_debug_string(buffer);
+		return len;
+	}
+
+	ROS_NOT_IMPLEMENTED;
+
 	struct iovec iovs[2] = {
 		{ .iov_base = f->wbase, .iov_len = f->wpos-f->wbase },
 		{ .iov_base = (void *)buf, .iov_len = len }
