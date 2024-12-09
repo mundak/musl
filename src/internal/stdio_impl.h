@@ -109,4 +109,42 @@ hidden void __getopt_msg(const char *, const char *, const char *, size_t);
 hidden FILE *__fopen_rb_ca(const char *, FILE *, unsigned char *, size_t);
 hidden int __fclose_ca(FILE *);
 
+// ringos
+#include <common/ros_debug.h>
+#include <services/files/srv_files.h>
+#include <kernel/devices/devices_common.h>
+
+inline uint64_t ringos_get_srv_files()
+{
+	static uint64_t srv_files = 0;
+	if (srv_files > 0)
+	{
+		// Already opened.
+		return srv_files;
+	}
+
+	const char* endpoint_name = ROS_SRV_FILES_NAME;
+	int32_t interface_version = ROS_SRV_FILES_VERSION_CURRENT;
+	int32_t expected_numer_of_functions = ROS_SRV_FILES_RPC_COUNT;
+
+	char full_name[ROS_MAX_DEVICE_NAME_LENGTH + 1];
+	snprintf(full_name, ROS_MAX_DEVICE_NAME_LENGTH, "%s_v%d", endpoint_name, interface_version);
+
+	int32_t num_of_functions;
+	if (ros_sys_rpc_get(full_name, &srv_files, &num_of_functions) != ROS_STATUS_SUCCESS)
+	{
+		ROS_PRINTF_ERROR("Failed to get '%s' driver RPC.", endpoint_name);
+		return 0;
+	}
+
+	if (num_of_functions != expected_numer_of_functions)
+	{
+		ROS_PRINTF_ERROR("Unexpected RPC interface for '%s'.", endpoint_name);
+		return 0;
+	}
+
+	return srv_files;
+}
+
+
 #endif
