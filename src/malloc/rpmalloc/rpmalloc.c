@@ -97,7 +97,7 @@
 #endif
 #ifndef ENABLE_ASSERTS
 //! Enable asserts
-#define ENABLE_ASSERTS            0
+#define ENABLE_ASSERTS            1
 #endif
 #ifndef ENABLE_OVERRIDE
 //! Override standard library malloc/free and new/delete entry points
@@ -774,7 +774,7 @@ get_thread_heap_raw(void) {
 static inline heap_t*
 get_thread_heap(void) {
 	heap_t* heap = get_thread_heap_raw();
-#if ENABLE_PRELOAD
+#if 1 // ENABLE_PRELOAD
 	if (EXPECTED(heap != 0))
 		return heap;
 	rpmalloc_initialize();

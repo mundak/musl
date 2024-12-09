@@ -2,23 +2,8 @@
 
 #include "rpmalloc.h"
 
-static void initialize_if_needed()
-{
-  // TODO! this is not thread safe.
-  static int initialized = 0;
-  if (initialized)
-  {
-    return;
-  }
-
-  rpmalloc_initialize();
-  initialized = 1;
-}
-
 void* __libc_malloc_impl(size_t n)
 {
-  initialize_if_needed();
-
   return rpmalloc(n);
 }
 
