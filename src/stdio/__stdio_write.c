@@ -5,16 +5,32 @@
 #include <kernel/syscalls.h>
 #include <common/ros_debug.h>
 
+static void print_exact(const char* str, size_t length)
+{
+	char buffer[1024];
+	ROS_ASSERT(length < 1024);
+	strncpy(buffer, str, length);
+	buffer[length] = 0;
+
+	ros_sys_debug_string(buffer);
+}
+
 size_t __stdio_write(FILE *f, const unsigned char *buf, size_t len)
 {
 	// ringos
 	if (f == stdout || f == stderr)
 	{
-		ROS_ASSERT(len < 1024);
-		char buffer[1024];
-		strncpy(buffer, buf, len);
-		buffer[len] = 0;
-		ros_sys_debug_string(buffer);
+		size_t buffered_length = f->wpos-f->wbase;
+		if (buffered_length)
+		{
+			print_exact(f->wbase, buffered_length);
+		}
+
+		print_exact (buf, len);
+
+		f->wend = f->buf + f->buf_size;
+		f->wpos = f->wbase = f->buf;
+
 		return len;
 	}
 
