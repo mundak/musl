@@ -22,7 +22,7 @@ static uint64_t get_srv_files()
 	int32_t expected_numer_of_functions = ROS_SRV_FILES_RPC_COUNT;
 
 	char full_name[ROS_MAX_DEVICE_NAME_LENGTH + 1];
-	snprintf("%s_v%d", endpoint_name, interface_version);
+	snprintf(full_name, ROS_MAX_DEVICE_NAME_LENGTH, "%s_v%d", endpoint_name, interface_version);
 
 	int32_t num_of_functions;
 	if (ros_sys_rpc_get(full_name, &g_srv_files, &num_of_functions) != ROS_STATUS_SUCCESS)
