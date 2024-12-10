@@ -26,7 +26,7 @@ void *__mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 	uint64_t address = (uint64_t) start;
 	uint64_t num_of_pages = len / ROS_MEMORY_PAGE_SIZE;
 
-	if (ros_sys_memory_allocate_pages(&address, num_of_pages) != ROS_STATUS_SUCCESS)
+	if (ros_sys_allocate_memory(&address, num_of_pages) != ROS_STATUS_SUCCESS)
 	{
 		return NULL;
 	}
